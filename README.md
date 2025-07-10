@@ -33,6 +33,11 @@ This is a .NET solution that implements a message-based architecture using Rabbi
 6. **Rabbitmq.HWReceiver**
    - Specialized receiver implementation
    - Handles specific message receiving scenarios
+   
+### Architecture
+
+![Diagram](images/Diagram.png)
+
 
 ## Technical Stack
 - **Framework**: .NET 8.0 and .NET 9.0 Windows
