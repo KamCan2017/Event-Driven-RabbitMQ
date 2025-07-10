@@ -12,9 +12,9 @@ using System.Reflection;
 
 
 IServiceCollection services = new ServiceCollection();
-
- services.AddTransient(c => new ProducerBook());
- services.AddTransient(c => new ProducerLogs());
+var channel = ChannelFactory.CreateChannel();
+ services.AddTransient(c => new ProducerBook(channel));
+ services.AddTransient(c => new ProducerLogs(channel));
 services.AddMediatR(c =>
 {
     c.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(BookCommand))!);

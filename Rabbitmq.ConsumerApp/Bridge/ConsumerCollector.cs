@@ -1,4 +1,5 @@
 
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Rabbitmq.ConsumerApp.Models;
 using Rabbitmq.Consumers;
@@ -7,11 +8,12 @@ namespace Rabbitmq.ConsumerApp;
 
 public class ConsumerCollector: IConsumerCollector
 {
-    public ConsumerCollector()
+    public ConsumerCollector(IModel channel)
     {
-        new ConsumerBookCreated().ReceivedMessage += async (_, args) => { await HandleData(args, InfoState.New); };
-        new ConsumerBookDeleted().ReceivedMessage += async (_, args) => { await HandleData(args, InfoState.Deleted); };
-        new ConsumerBookBlocked().ReceivedMessage += async (_, args) => { await HandleData(args, InfoState.Blocked); };
+        ArgumentNullException.ThrowIfNull(channel);
+        new ConsumerBookCreated(channel).ReceivedMessage += async (_, args) => { await HandleData(args, InfoState.New); };
+        new ConsumerBookDeleted(channel).ReceivedMessage += async (_, args) => { await HandleData(args, InfoState.Deleted); };
+        new ConsumerBookBlocked(channel).ReceivedMessage += async (_, args) => { await HandleData(args, InfoState.Blocked); };
     }
     
     public EventHandler<InfoStateModel>? OnBookRetrieved { get; set; }

@@ -1,29 +1,29 @@
-﻿using Rabbitmq.Shared;
+﻿using System.Diagnostics;
+using Rabbitmq.Shared;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace Rabbitmq.Consumers
 {
-    public abstract class ConsumerBook: BaseConsumer
+    public abstract class ConsumerBook(IModel channel): BaseConsumer(channel)
     {
         protected virtual string Severity => nameof(ModelState.Created);
 
         protected override void Init()
         {
-            var channel = ChannelFactory.CreateChannel();
-            channel.ExchangeDeclare(exchange: ExchangeContext.BookDirect, type: ExchangeType.Direct);
+            Channel.ExchangeDeclare(exchange: ExchangeContext.BookDirect, type: ExchangeType.Direct);
 
             // declare a server-named queue
-            var queueName = channel.QueueDeclare().QueueName;
-            channel.QueueBind(queue: queueName,
+            var queueName = Channel.QueueDeclare().QueueName;
+            Channel.QueueBind(queue: queueName,
                               exchange: ExchangeContext.BookDirect,
                               routingKey: Severity);
 
-            Console.WriteLine(" [*] Waiting for books...");
+            Debug.WriteLine(" [*] Waiting for books...");
 
-            var consumer = new EventingBasicConsumer(channel);
+            var consumer = new EventingBasicConsumer(Channel);
             consumer.Received += HandleMessage;
-            channel.BasicConsume(queue: queueName,
+            Channel.BasicConsume(queue: queueName,
                                  autoAck: true,
                                  consumer: consumer);
 

@@ -1,5 +1,6 @@
 ﻿
 using System.Windows;
+using Rabbitmq.Shared;
 
 namespace Rabbitmq.ConsumerApp;
 
@@ -11,6 +12,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel(new ConsumerCollector());
+        DataContext = new MainWindowViewModel(new ConsumerCollector(ChannelFactory.CreateChannel()));
     }
 }

@@ -1,11 +1,15 @@
-﻿using RabbitMQ.Client.Events;
+﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Rabbitmq.Consumers;
 
 public abstract class BaseConsumer
 {
-    protected BaseConsumer()
+    protected readonly IModel? Channel;
+    protected BaseConsumer(IModel channel)
     {
+        ArgumentNullException.ThrowIfNull(channel);
+        Channel = channel;
         Init();
     }
 

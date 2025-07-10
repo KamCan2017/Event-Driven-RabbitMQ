@@ -1,13 +1,14 @@
-﻿using Rabbitmq.Shared;
+﻿using RabbitMQ.Client;
+using Rabbitmq.Shared;
 
 namespace Rabbitmq.Consumers;
 
-public class ConsumerBookDeleted: ConsumerBook
+public class ConsumerBookDeleted(IModel channel): ConsumerBook(channel)
 {
     protected override string Severity => nameof(ModelState.Deleted);
 }
 
-public class ConsumerBookBlocked: ConsumerBook
+public class ConsumerBookBlocked (IModel channel): ConsumerBook(channel)
 {
     protected override string Severity => nameof(ModelState.Blocked);
 }

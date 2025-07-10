@@ -5,9 +5,11 @@ namespace Rabbitmq.Producers;
 
 public abstract class BaseProducer: IProducer
 {
-    protected IModel? Channel;
-    protected BaseProducer()
+    protected readonly IModel? Channel;
+    protected BaseProducer(IModel channel)
     {
+        ArgumentNullException.ThrowIfNull(channel);
+        Channel = channel;
         Init();
     }
 
